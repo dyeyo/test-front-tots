@@ -1,0 +1,45 @@
+<div class="mt-10">
+  <div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right">
+      <thead class="text-xs text-black uppercase bg-white">
+        <tr>
+          <th scope="col" class="px-6 py-3">Nombre</th>
+          <th scope="col" class="px-6 py-3">Lugar</th>
+          <th scope="col" class="px-6 py-3">Fecha</th>
+          <th scope="col" class="px-6 py-3">Horas</th>
+          <th scope="col" class="px-6 py-3"></th>
+          <th scope="col" class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of events" class="bg-white border-b">
+          <th
+            scope="row"
+            class="px-6 py-4 font-medium text-black whitespace-nowrap"
+          >
+            {{ item.nombre_evento }}
+          </th>
+          <td class="px-6 py-4">{{ item.espacio.nombre }}</td>
+          <td class="px-6 py-4">{{ item.fecha }}</td>
+          <td class="px-6 py-4">
+            {{ item.hora_inicio }} a {{ item.hora_fin }}
+          </td>
+          <td class="px-6 py-4">
+            <router-link [routerLink]="['/editar-reserva/',item.id]">
+              <a
+                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >Editar</a
+              >
+            </router-link>
+          </td>
+          <td class="px-6 py-4">
+              <a (click)="cancelEvent(item.id)"
+                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >Cancelar</a
+              >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
