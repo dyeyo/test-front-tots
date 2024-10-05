@@ -37,7 +37,7 @@ export class EventsService {
     return this.http.get(`${environment.url}reservas/edit/${id}`);
   }
 
-  updateReserva(payload: IEventos, id: number) {
+  updateReserva(payload: IEventos, id: string) {
     return this.http.put(`${environment.url}reservas/${id}`, payload);
   }
 

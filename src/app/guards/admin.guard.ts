@@ -5,13 +5,13 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): boolean | Observable<boolean> | Promise<boolean> {
-    const user = localStorage.getItem('user');
+    const admin = localStorage.getItem('pass');
 
-    if (user) {
+    if (admin == '1') {
       return true; 
     } else {
       this.router.navigate(['/']);

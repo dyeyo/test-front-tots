@@ -57,9 +57,7 @@ export class FormEventComponent {
         Swal.fire({
           title: 'Perfecto',
           text: 'Su reserva fue realizada con exito',
-          showDenyButton: true,
           icon: 'success',
-          showCancelButton: true,
           confirmButtonText: 'Continuar',
           customClass: {
             confirmButton:

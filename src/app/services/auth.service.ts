@@ -9,6 +9,7 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService {
   private tokenSubject = new BehaviorSubject<string | null>(this.getUser());
+  private adminSubject = new BehaviorSubject<string | null>(this.getAdmin());
   constructor(private http: HttpClient) {}
 
   register(payload: IUsers) {
@@ -24,11 +25,9 @@ export class AuthService {
 
   login(payload: IUsers) {
     return this.http.post(`${environment.url}login`, payload).pipe(
-      tap((data: any) => {
-        // const user = {
-        //   email: payload.email,
-        // };
+      tap((data: any) => {      
         this.setToken(data.token);
+        this.setAdmin(data.admin);
       })
     );
   }
@@ -41,8 +40,21 @@ export class AuthService {
     return this.tokenSubject.asObservable();
   }
 
+  getAdmin() {
+    return localStorage.getItem('pass');
+  }
+
+  getAdminObservable() {
+    return this.adminSubject.asObservable();
+  }
+
   setToken(token: any) {
     localStorage.setItem('token',  JSON.stringify(token)); 
     this.tokenSubject.next(token);
+  }
+
+  setAdmin(admin: any) {
+    localStorage.setItem('pass',  JSON.stringify(admin)); 
+    this.adminSubject.next(admin);
   }
 }

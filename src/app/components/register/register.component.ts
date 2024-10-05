@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { IUsers } from './../../interfaces/IUsers';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { AuthService } from './../../services/auth.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIf],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -50,7 +51,7 @@ export class RegisterComponent implements OnInit {
       error: (error) => {
         console.error('Error al registar:', error);
         Swal.fire({
-          title: 'Error a hacer el pago',
+          title: 'Error a hacer el registro',
           text: 'Algo va mal, intentelo mas tarde',
           icon: 'error',
         });

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject,OnChanges,SimpleChanges  } from '@angular/core';
 import { RouterModule, RouterLink } from '@angular/router';
 import { AuthService } from './../../services/auth.service';
 import { Router } from '@angular/router';
@@ -11,14 +11,30 @@ import { Router } from '@angular/router';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css',
 })
-export class NavComponent implements OnInit{
+export class NavComponent implements OnInit, OnChanges {
   authService = inject(AuthService);
   router = inject(Router);
   users: string = "" 
+  isAdmin: string = "" 
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('Cambios detectados:', changes);
+    this.authService.getUserObservable().subscribe((user:any) => {
+      this.users = user;
+    });
+
+    this.authService.getAdminObservable().subscribe((admin:any) => {
+      this.isAdmin = admin;
+    });
+  }
 
   ngOnInit(): void {
     this.authService.getUserObservable().subscribe((user:any) => {
       this.users = user;
+    });
+
+    this.authService.getAdminObservable().subscribe((admin:any) => {
+      this.isAdmin = admin;
     });
   }
 
@@ -27,6 +43,9 @@ export class NavComponent implements OnInit{
     this.authService.getUserObservable().subscribe((user:any) => {
       this.users = "";
     });
-    this.router.navigate(['/']);
+    this.authService.getAdminObservable().subscribe((admin:any) => {
+      this.isAdmin = "";
+    });
+    this.router.navigate(['/login']);
   }
 }

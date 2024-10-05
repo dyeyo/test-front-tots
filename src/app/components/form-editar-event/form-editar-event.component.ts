@@ -26,15 +26,15 @@ export class FormEditarEventComponent {
   route = inject(ActivatedRoute);
   router = inject(Router);
   formReserva: FormGroup | any;
-  eventoId: string | null = null;
-  espacioId: string | null = null;
+  eventoId: string = "";
+  espacioId: string  = "";
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.eventoId = params['id'];
     });
     this.createForm();
-    this.loadData("1")
+    this.loadData()
   }
 
   createForm() {
@@ -46,12 +46,16 @@ export class FormEditarEventComponent {
     });
   }
 
-  loadData(id:string) {
-    this.eventService.myEditReservas(id).subscribe(
+  loadData() {
+    console.log(typeof this.eventoId);
+    this.eventService.myEditReservas(this.eventoId).subscribe(
       (data:any) => {
+        console.log(data);
         this.espacioId=data.espacio_id
         this.formReserva.get("nombre_evento").setValue(data.nombre_evento);
-        this.formReserva.get("fecha").setValue(data.fecha);
+        const date = new Date(data.fecha);
+        const formattedDate = date.toISOString().split('T')[0]; 
+        this.formReserva.get("fecha").setValue(formattedDate);
         this.formReserva.get("hora_inicio").setValue(data.hora_inicio);
         this.formReserva.get("hora_fin").setValue(data.hora_fin);
       },
@@ -77,14 +81,12 @@ export class FormEditarEventComponent {
       hora_inicio: this.formReserva.get('hora_inicio').value,
       hora_fin: this.formReserva.get('hora_fin').value,
     };
-    this.eventService.sendReserva(payload).subscribe(
+    this.eventService.updateReserva(payload,this.eventoId).subscribe(
       (data) => {
         Swal.fire({
           title: 'Perfecto',
           text: 'Su reserva fue actualizada con exito',
-          showDenyButton: true,
           icon: 'success',
-          showCancelButton: true,
           confirmButtonText: 'Continuar',
           customClass: {
             confirmButton:
@@ -92,7 +94,7 @@ export class FormEditarEventComponent {
           },
         }).then((result) => {
           if (result.isConfirmed) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/mis-reservas']);
           }
         });
       },

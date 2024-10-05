@@ -1,3 +1,4 @@
+import { DateTimeFormatPipe } from './../../pipes/date-time-format.pipe';
 import { RouterModule } from '@angular/router';
 import { NgFor } from '@angular/common';
 import { EventsService } from './../../services/events.service';
@@ -7,7 +8,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-my-events',
   standalone: true,
-  imports: [NgFor, RouterModule],
+  imports: [NgFor, RouterModule,DateTimeFormatPipe],
   templateUrl: './my-events.component.html',
   styleUrl: './my-events.component.css',
 })

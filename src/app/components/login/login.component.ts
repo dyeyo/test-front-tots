@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { IUsers } from './../../interfaces/IUsers';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,7 +14,7 @@ import { AuthService } from './../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIf],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -26,18 +27,18 @@ export class LoginComponent {
   ngOnInit(): void {
     this.createForm();
   }
-
+ 
   createForm() {
     this.formLogin = this.formBuilder.group({
       email: [
-        '',
+        'diego@gmail.com',
         [
           Validators.required,
           Validators.maxLength(149),
           Validators.pattern('^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'),
         ],
       ],
-      password: ['', Validators.required],
+      password: ['123456789', Validators.required],
     });
   }
 
@@ -50,7 +51,7 @@ export class LoginComponent {
       error: (error) => {
         console.error('Error al registar:', error);
         Swal.fire({
-          title: 'Error a hacer el pago',
+          title: 'Error al inicar sesion',
           text: 'Algo va mal, intentelo mas tarde',
           icon: 'error',
         });

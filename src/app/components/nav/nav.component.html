@@ -6,11 +6,7 @@
       href="/"
       class="flex items-center space-x-3 rtl:space-x-reverse"
     >
-      <img
-      src="https://369969691f476073508a-60bf0867add971908d4f26a64519c2aa.ssl.cf5.rackcdn.com/logos/logo_epayco_400px.png"
-        class="h-8"
-        alt="Flowbite Logo"
-      />
+      
     </a>
     <button
       data-collapse-toggle="navbar-default"
@@ -57,6 +53,14 @@
             >Mis Eventos</a
           >
         </li>
+        <li *ngIf="isAdmin == '1'">
+          <a
+            [routerLink]="['/abm']"
+            class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+            aria-current="page"
+            >ABM</a
+          >
+        </li>
         <li>
           <a
             (click)="logout()"
@@ -67,9 +71,16 @@
         }@else {
         <li>
           <a
-            [routerLink]="['/register']"
+            [routerLink]="['/login']"
             class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
             >Entrar</a
+          >
+        </li>
+        <li>
+          <a
+            [routerLink]="['/registro']"
+            class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+            >Regsitrar</a
           >
         </li>
         }
