@@ -8,8 +8,8 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import Swal from 'sweetalert2';
 import { AuthService } from './../../services/auth.service';
+import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +21,7 @@ import { AuthService } from './../../services/auth.service';
 export class LoginComponent {
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
+  toastr = inject(ToastrService);
   router = inject(Router);
   formLogin: FormGroup | any;
   
@@ -49,15 +50,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Error al registar:', error);
-        Swal.fire({
-          title: 'Error al inicar sesion',
-          text: 'Algo va mal, intentelo mas tarde',
-          icon: 'error',
-        });
-      },
-      complete: () => {
-        this.router.navigate(['/']);
+        this.toastr.error("Error al inicar sesion","Algo va mal");
       },
     });
   }

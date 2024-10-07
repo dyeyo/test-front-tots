@@ -10,7 +10,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Component, OnInit, inject } from '@angular/core';
-import Swal from 'sweetalert2';
+import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 
 @Component({
   selector: 'app-events',
@@ -22,9 +22,11 @@ import Swal from 'sweetalert2';
 export class EventsComponent implements OnInit {
   formBuilder = inject(FormBuilder);
   eventsService = inject(EventsService);
+  toastr = inject(ToastrService);
   formFilters: FormGroup | any;
   events: any = [];
   urlMedia: String = environment.url_media
+
 
   ngOnInit(): void {
     this.loadEvents();
@@ -41,25 +43,14 @@ export class EventsComponent implements OnInit {
   }
 
   loadEvents() {
-    const payload:IEventos = this.formFilters?.value;
+    const payload: IEventos = this.formFilters?.value;
     this.eventsService.getEvents(payload).subscribe({
       next: (data: any) => {
         this.events = data;
       },
       error: (error) => {
-        Swal.fire({
-          title: 'Error a hacer el pago',
-          text: 'Algo va mal, intentelo mas tarde',
-          icon: 'error',
-          customClass: {
-            confirmButton:
-              'bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded px-4 py-2',
-            cancelButton:
-              'bg-gray-300 text-gray-800 hover:bg-gray-400 focus:outline-none focus:ring focus:ring-gray-200 rounded px-4 py-2',
-          },
-        });
-        console.error('Error al registar:', error);
+        this.toastr.error("Error al cargar los espacios","Algo va mal");
       },
     });
-  }
+}
 }

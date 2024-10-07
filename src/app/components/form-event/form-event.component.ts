@@ -11,7 +11,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import Swal from 'sweetalert2';
+import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 
 @Component({
   selector: 'app-form-event',
@@ -24,6 +24,7 @@ export class FormEventComponent {
   formBuilder = inject(FormBuilder);
   eventService = inject(EventsService);
   route = inject(ActivatedRoute);
+  toastr = inject(ToastrService);
   router = inject(Router);
   formReserva: FormGroup | any;
   espacioId: string | null = null;
@@ -54,31 +55,11 @@ export class FormEventComponent {
     };
     this.eventService.sendReserva(payload).subscribe(
       (data) => {
-        Swal.fire({
-          title: 'Perfecto',
-          text: 'Su reserva fue realizada con exito',
-          icon: 'success',
-          confirmButtonText: 'Continuar',
-          customClass: {
-            confirmButton:
-              'bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded px-4 py-2',
-          },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.router.navigate(['/']);
-          }
-        });
+        this.toastr.success('Su reserva fue realizada con exito', 'Genial!');
+        this.router.navigate(['/']);
       },
       (error) => {
-        Swal.fire({
-          title: 'Lo sentimios',
-          text: error.error.error,
-          icon: 'error',
-          customClass: {
-            confirmButton:
-              'bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded px-4 py-2',
-          },
-        });
+        this.toastr.error(error.error.error, 'Algo va mal');
       }
     );
   }

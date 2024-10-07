@@ -18,3 +18,6 @@ Breve descripción del proyecto, explicando su propósito y funcionalidad.
 
 2. Correr proyecto
     ng s -o
+
+2. Correr test
+    ng test

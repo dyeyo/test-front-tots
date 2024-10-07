@@ -10,31 +10,32 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import Swal from 'sweetalert2';
 import { Component, inject } from '@angular/core';
+import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 
 @Component({
   selector: 'app-form-editar-event',
   standalone: true,
-  imports: [NgIf,ReactiveFormsModule,RouterModule],
+  imports: [NgIf, ReactiveFormsModule, RouterModule],
   templateUrl: './form-editar-event.component.html',
-  styleUrl: './form-editar-event.component.css'
+  styleUrl: './form-editar-event.component.css',
 })
 export class FormEditarEventComponent {
   formBuilder = inject(FormBuilder);
   eventService = inject(EventsService);
+  toastr = inject(ToastrService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   formReserva: FormGroup | any;
-  eventoId: string = "";
-  espacioId: string  = "";
+  eventoId: string = '';
+  espacioId: string = '';
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.eventoId = params['id'];
     });
     this.createForm();
-    this.loadData()
+    this.loadData();
   }
 
   createForm() {
@@ -47,28 +48,19 @@ export class FormEditarEventComponent {
   }
 
   loadData() {
-    console.log(typeof this.eventoId);
     this.eventService.myEditReservas(this.eventoId).subscribe(
-      (data:any) => {
+      (data: any) => {
         console.log(data);
-        this.espacioId=data.espacio_id
-        this.formReserva.get("nombre_evento").setValue(data.nombre_evento);
+        this.espacioId = data.espacio_id;
+        this.formReserva.get('nombre_evento').setValue(data.nombre_evento);
         const date = new Date(data.fecha);
-        const formattedDate = date.toISOString().split('T')[0]; 
-        this.formReserva.get("fecha").setValue(formattedDate);
-        this.formReserva.get("hora_inicio").setValue(data.hora_inicio);
-        this.formReserva.get("hora_fin").setValue(data.hora_fin);
+        const formattedDate = date.toISOString().split('T')[0];
+        this.formReserva.get('fecha').setValue(formattedDate);
+        this.formReserva.get('hora_inicio').setValue(data.hora_inicio);
+        this.formReserva.get('hora_fin').setValue(data.hora_fin);
       },
       (error) => {
-        Swal.fire({
-          title: 'Lo sentimios',
-          text: error.error.error,
-          icon: 'error',
-          customClass: {
-            confirmButton:
-              'bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded px-4 py-2',
-          },
-        });
+        this.toastr.error("Error al cargar los datos", 'Algo va mal');
       }
     );
   }
@@ -81,33 +73,13 @@ export class FormEditarEventComponent {
       hora_inicio: this.formReserva.get('hora_inicio').value,
       hora_fin: this.formReserva.get('hora_fin').value,
     };
-    this.eventService.updateReserva(payload,this.eventoId).subscribe(
+    this.eventService.updateReserva(payload, this.eventoId).subscribe(
       (data) => {
-        Swal.fire({
-          title: 'Perfecto',
-          text: 'Su reserva fue actualizada con exito',
-          icon: 'success',
-          confirmButtonText: 'Continuar',
-          customClass: {
-            confirmButton:
-              'bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded px-4 py-2',
-          },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.router.navigate(['/mis-reservas']);
-          }
-        });
+        this.toastr.success('Su reserva fue actualizada con exito', 'Genial!');
+        this.router.navigate(['/mis-reservas']);
       },
       (error) => {
-        Swal.fire({
-          title: 'Lo sentimios',
-          text: error.error.error,
-          icon: 'error',
-          customClass: {
-            confirmButton:
-              'bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded px-4 py-2',
-          },
-        });
+        this.toastr.error("Error al actualziar la reserva", 'Algo va mal');
       }
     );
   }

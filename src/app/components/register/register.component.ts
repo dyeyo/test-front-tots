@@ -8,8 +8,9 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 import { AuthService } from './../../services/auth.service';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -20,6 +21,7 @@ import { AuthService } from './../../services/auth.service';
 export class RegisterComponent implements OnInit {
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
+  toastr = inject(ToastrService);
   router = inject(Router);
   formRegister: FormGroup | any;
   
@@ -49,12 +51,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Error al registar:', error);
-        Swal.fire({
-          title: 'Error a hacer el registro',
-          text: 'Algo va mal, intentelo mas tarde',
-          icon: 'error',
-        });
+        this.toastr.error("Error al hacer el registro","Algo va mal");
       },
       complete: () => {
         this.router.navigate(['/']);
